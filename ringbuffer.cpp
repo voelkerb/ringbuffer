@@ -88,7 +88,7 @@ bool IRAM_ATTR RingBuffer::write(uint8_t * data, uint32_t size) {
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[_ring_buffer_size - _writePtr], end);
   }
   _writePtr = end;
-  return overflow;
+  return !overflow;
 }
 
 void RingBuffer::reset() {

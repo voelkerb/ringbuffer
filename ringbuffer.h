@@ -23,7 +23,7 @@ class RingBuffer {
     RingBuffer(uint32_t size);
     RingBuffer(uint32_t size, bool usePSRAM);
     bool init();
-    bool IRAM_ATTR write(uint8_t * data, uint32_t size);
+    bool IRAM_ATTR write(uint8_t * data, uint32_t size); // Returns false if overflow occurs
     bool read(uint8_t * data, uint32_t size);
     void reset();
     bool inPSRAM();
