@@ -17,12 +17,14 @@ RingBuffer::RingBuffer(uint32_t size) {
   _ring_buffer_size = size;
   _psram = false;
   _buffer = NULL;
+  _resetted = true; 
 }
 
 RingBuffer::RingBuffer(uint32_t size, bool usePSRAM) {
   _ring_buffer_size = size;
   _psram = usePSRAM;
   _buffer = NULL;
+  _resetted = true; 
 }
 
 bool RingBuffer::init() {
@@ -87,6 +89,7 @@ bool IRAM_ATTR RingBuffer::write(uint8_t * data, uint32_t size) {
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[0], _ring_buffer_size - _writePtr);
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[_ring_buffer_size - _writePtr], end);
   }
+  _resetted = false; 
   _writePtr = end;
   return !overflow;
 }
@@ -94,6 +97,7 @@ bool IRAM_ATTR RingBuffer::write(uint8_t * data, uint32_t size) {
 void RingBuffer::reset() {
   _writePtr = 0;
   _readPtr = 0;
+  _resetted = true; 
 }
 
 bool RingBuffer::read(uint8_t * data, uint32_t size) {
@@ -114,6 +118,7 @@ uint32_t RingBuffer::_rwDistance() {
   else return _writePtr - _readPtr;
 }
 uint32_t IRAM_ATTR RingBuffer::_wrDistance() {
+  if (_resetted) return _ring_buffer_size;
   if (_readPtr < _writePtr) return _readPtr + (_ring_buffer_size - _writePtr);
   else return _readPtr - _writePtr;
 }

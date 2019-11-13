@@ -39,6 +39,7 @@ class RingBuffer {
     uint32_t _ring_buffer_size;
     uint32_t _readPtr;
     uint32_t _writePtr;
+    bool _resetted;
     // Buffer pointer
     uint8_t* _buffer;
     // esp_himem_handle_t _memoryHandle;
