@@ -79,10 +79,14 @@ uint32_t RingBuffer::availableForWrite() {
   return _wrDistance();
 }
 
-bool IRAM_ATTR RingBuffer::write(uint8_t * data, uint32_t size) {
+bool RingBuffer::write(uint8_t * data, uint32_t size) {
   uint32_t end = (_writePtr+size)%_ring_buffer_size;
   bool overflow = false;
-  if (_wrDistance() < size) overflow = true;
+  if (_wrDistance() < size) {
+    overflow = true;
+    // Do not allow to write data here
+    return false;
+  }
   if (end > _writePtr) {
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[0], size);
   } else {
