@@ -28,7 +28,7 @@ class RingBuffer {
     void reset();
     bool inPSRAM();
     bool setSize(uint32_t size, bool inPSRAM);
-    size_t getSize();
+    uint32_t getSize();
     uint32_t available();
     uint32_t availableForWrite();
   private:
