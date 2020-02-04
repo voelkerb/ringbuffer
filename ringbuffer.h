@@ -21,14 +21,12 @@
 class RingBuffer {
   public:
     RingBuffer(uint32_t size);
-    RingBuffer(uint32_t size, bool usePSRAM);
     bool init();
     bool IRAM_ATTR write(uint8_t * data, uint32_t size); // Returns false if overflow occurs
     bool read(uint8_t * data, uint32_t size);
     void reset();
-    bool inPSRAM();
-    bool setSize(uint32_t size, bool inPSRAM);
-    size_t getSize();
+    bool setSize(uint32_t size);
+    uint32_t getSize();
     uint32_t available();
     uint32_t availableForWrite();
   private:
@@ -42,10 +40,6 @@ class RingBuffer {
     bool _resetted;
     // Buffer pointer
     uint8_t* _buffer;
-    // esp_himem_handle_t _memoryHandle;
-    // esp_himem_rangehandle_t _rangeHandle;
-    // If ps ram should be used for the buffer
-    bool _psram;
 };
 
 #endif
