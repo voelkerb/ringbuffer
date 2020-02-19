@@ -95,7 +95,7 @@ uint32_t RingBuffer::_rwDistance() {
   else return _writePtr - _readPtr;
 }
 uint32_t IRAM_ATTR RingBuffer::_wrDistance() {
-  if (_resetted) return _ring_buffer_size;
+  if (_resetted or (_readPtr - _writePtr) == 0) return _ring_buffer_size;
   if (_readPtr < _writePtr) return _readPtr + (_ring_buffer_size - _writePtr);
   else return _readPtr - _writePtr;
 }
