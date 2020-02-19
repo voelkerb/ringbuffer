@@ -82,6 +82,9 @@ uint32_t RingBuffer::availableForWrite() {
 bool RingBuffer::write(uint8_t * data, uint32_t size) {
   uint32_t end = (_writePtr+size)%_ring_buffer_size;
   bool overflow = false;
+  // 0 means, both pointers are on the same, 
+  // if we only allo _wrDistance() < size and not
+  // wrDistance() <= size it should be fine
   if (_wrDistance() < size) {
     overflow = true;
     // Do not allow to write data here
@@ -122,7 +125,7 @@ uint32_t RingBuffer::_rwDistance() {
   else return _writePtr - _readPtr;
 }
 uint32_t IRAM_ATTR RingBuffer::_wrDistance() {
-  if (_resetted) return _ring_buffer_size;
+  if (_resetted or (_readPtr - _writePtr) == 0) return _ring_buffer_size;
   if (_readPtr < _writePtr) return _readPtr + (_ring_buffer_size - _writePtr);
   else return _readPtr - _writePtr;
 }
