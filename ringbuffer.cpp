@@ -134,7 +134,7 @@ bool RingBuffer::inPSRAM() {
   return _psram;
 }
 
-size_t RingBuffer::getSize() {
+uint32_t RingBuffer::getSize() {
   if (_buffer != NULL) return _ring_buffer_size;
   else return 0;
 }
