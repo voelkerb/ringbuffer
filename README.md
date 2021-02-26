@@ -1,5 +1,5 @@
 # ringbuffer
-Simple ringbuffer implementation.
+Simple ringbuffer implementation meant to be used for Arduino sketches.
 Allows to store arbitrary data types in a ringbuffer. Uses stream syntax of available, read and write.
 
 ```C++
