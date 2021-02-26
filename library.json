@@ -1,5 +1,5 @@
 {
-	"name": "ringbuffer",
+	"name": "RingBuffer",
 	"version": "1.0.0",
 	"keywords": "Communication",
 	"description": "Simple ringbuffer implementation.",
