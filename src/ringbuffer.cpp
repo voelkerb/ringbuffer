@@ -2,15 +2,13 @@
  Library implementing a simple ringbuffer.
  Functions like available, write and read are implemented
 
- Feel free to use the code as it is.
+ License: Creative Common V1. 
 
  Benjamin Völker, voelkerb@me.com
- Embedded Systems
- University of Freiburg, Institute of Informatik
+ Embedded Systems Engineer
  ****************************************************/
 
 #include "ringbuffer.h"
-
 
 
 RingBuffer::RingBuffer(uint32_t size) {
@@ -20,12 +18,14 @@ RingBuffer::RingBuffer(uint32_t size) {
   _resetted = true; 
 }
 
+#if defined(ESP32)
 RingBuffer::RingBuffer(uint32_t size, bool usePSRAM) {
   _ring_buffer_size = size;
   _psram = usePSRAM;
   _buffer = NULL;
   _resetted = true; 
 }
+#endif
 
 bool RingBuffer::init() {
   // You cannot init twice
@@ -43,32 +43,50 @@ bool RingBuffer::init() {
   //     fill_mem_seed(i ^ seed, ptr, ESP_HIMEM_BLKSZ); //
   //     ESP_ERROR_CHECK(esp_himem_unmap(rh, ptr, ESP_HIMEM_BLKSZ));
   // }
-
+  #if defined(ESP32)
   if (_psram) {
     _buffer = (uint8_t*)ps_malloc(_ring_buffer_size);
-    if (_buffer == NULL) _psram = false;
   } 
-  if (!_psram) _buffer = (uint8_t*)malloc(_ring_buffer_size);
+  #endif
+  if (!_psram) {
+    _buffer = (uint8_t*)malloc(_ring_buffer_size);
+  }
 
   // Return success or not
   if (_buffer != NULL) return true;
   else return false;
 }
 
-bool RingBuffer::setSize(uint32_t size, bool inPSRAM) {
+
+#if defined(ESP32)
+bool RingBuffer::reSize(uint32_t size, bool inPSRAM) {
   _ring_buffer_size = size;
   _psram = inPSRAM;
-  if (_psram) {
-    _buffer = (uint8_t*)ps_malloc(size);
-    if (_buffer == NULL) _psram = false;
-  } 
-  if (!_psram) _buffer = (uint8_t*)malloc(size);
-
-
-  // Return success or not
-  if (_buffer != NULL) return true;
-  else return false;
+  bool success = true;
+  // If it was initialized before, reinit
+  if (_buffer != NULL) {
+    // free(_buffer)
+    if (_psram) {
+      _buffer = (uint8_t*)ps_realloc(_buffer, _ring_buffer_size);
+    } else {
+      _buffer = (uint8_t*)realloc(_buffer, _ring_buffer_size);
+    }
+    if (_buffer == NULL) success = false;
+  }
+  return success;
 }
+#else 
+bool RingBuffer::reSize(uint32_t size) {
+  _ring_buffer_size = size;
+  bool success = true;
+  // If it was initialized before, reinit
+  if (_buffer != NULL) {
+    _buffer = (uint8_t*)realloc(_buffer, _ring_buffer_size);
+    if (_buffer == NULL) success = false;
+  }
+  return success
+}
+#endif
 
 
 uint32_t RingBuffer::available() {
@@ -130,9 +148,11 @@ uint32_t IRAM_ATTR RingBuffer::_wrDistance() {
   else return _readPtr - _writePtr;
 }
 
+#if defined(ESP32)
 bool RingBuffer::inPSRAM() {
   return _psram;
 }
+#endif
 
 uint32_t RingBuffer::getSize() {
   if (_buffer != NULL) return _ring_buffer_size;

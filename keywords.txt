@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring RingBuffer Library
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+	
+Network	KEYWORD1
+RingBuffer		KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+init	            KEYWORD2
+write	            KEYWORD2
+read	            KEYWORD2
+reset	            KEYWORD2
+setSize	            KEYWORD2
+inPSRAM		        KEYWORD2
+getSize	            KEYWORD2
+available	        KEYWORD2
+availableForWrite   KEYWORD2
+
+#######################################
+# Structures (KEYWORD3)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
