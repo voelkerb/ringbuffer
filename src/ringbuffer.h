@@ -35,7 +35,7 @@ class RingBuffer {
     bool inPSRAM();
     bool reSize(uint32_t size, bool inPSRAM=false);
 #else
-    bool retSize(uint32_t size);
+    bool reSize(uint32_t size);
 #endif
     uint32_t getSize();
     uint32_t available();

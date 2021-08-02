@@ -84,7 +84,7 @@ bool RingBuffer::reSize(uint32_t size) {
     _buffer = (uint8_t*)realloc(_buffer, _ring_buffer_size);
     if (_buffer == NULL) success = false;
   }
-  return success
+  return success;
 }
 #endif
 
