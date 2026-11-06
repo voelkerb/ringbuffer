@@ -112,7 +112,7 @@ bool RingBuffer::write(uint8_t * data, uint32_t size) {
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[0], size);
   } else {
     memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[0], _ring_buffer_size - _writePtr);
-    memcpy((uint8_t*)&_buffer[_writePtr],(uint8_t*)&data[_ring_buffer_size - _writePtr], end);
+    memcpy((uint8_t*)&_buffer[0],(uint8_t*)&data[_ring_buffer_size - _writePtr], end);
   }
   _resetted = false; 
   _writePtr = end;
